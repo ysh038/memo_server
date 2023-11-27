@@ -23,7 +23,7 @@ naver_redirect_uri_auth = 'http://60172174-lb-1059453829.ap-northeast-2.elb.amaz
 '''
 def connect_db():
     conn = psycopg2.connect(
-        host="postgres-container", # docker 이용해서 DB 접근할때는, DB 이름으로 원래는 127.0.0.1
+        host="60172174-lb-1059453829.ap-northeast-2.elb.amazonaws.com", # docker 이용해서 DB 접근할때는, DB 이름으로 원래는 127.0.0.1
         dbname="postgres",
         user="postgres",
         password="y3558325",
@@ -67,7 +67,7 @@ def home():
 # 이를 우회하기 위해서 브라우저가 호출할 URL 을 HTML 에 하드코딩하지 않고,
 # 아래처럼 서버가 주는 URL 로 redirect 하는 것으로 처리한다.
 # 주의! 아래 API 는 잘 동작하기 때문에 손대지 말 것
-@app.route('/memo/login')
+@app.route('/memo/login/')
 def onLogin():
     params={
             'response_type': 'code',
@@ -82,7 +82,7 @@ def onLogin():
 # 아래는 Redirect URI 로 등록된 경우 호출된다.
 # 만일 본인의 Redirect URI 가 http://localhost:8000/auth 의 경우처럼 /auth 대신 다른 것을
 # 사용한다면 아래 @app.route('/auth') 의 내용을 그 URL 로 바꿀 것
-@app.route('/memo/auth')
+@app.route('/memo/auth/')
 def onOAuthAuthorizationCodeRedirected():
     # TODO: 아래 1 ~ 4 를 채워 넣으시오.
     # 1. redirect uri 를 호출한 request 로부터 authorization code 와 state 정보를 얻어낸다.

@@ -137,3 +137,23 @@ nginx log 추적
 
 >tail -f /var/log/nginx/error.log </br>
 tail -f /var/log/nginx/access.log
+
+# postgresql 이미지 설치
+
+ec2 에서 할땐, sudo 붙여야함
+
+>docker pull postgres
+
+>docker docker run 
+-dp 5432:5432 
+--name postgresql 
+-e POSTGRES_PASSWORD=1234 
+-v 호스트 패키지 경로:/var/lib/postgres/data postgres
+
+##### docker shell 접속
+
+>sudo docker exec -it postgres /bin/bash
+
+##### postgresql 접속
+
+>psql -U postgres
