@@ -14,7 +14,7 @@ app = Flask(__name__)
 
 naver_client_id = 'Py8QuVo4SDJNdVdeVTEZ'
 naver_client_secret = 'zmQgnNNDt9'
-naver_redirect_uri = 'http://60172174-lb-1059453829.ap-northeast-2.elb.amazonaws.com/memo/auth'
+naver_redirect_uri = 'http://60172174-lb-1059453829.ap-northeast-2.elb.amazonaws.com/auth'
 naver_redirect_uri_auth = 'http://60172174-lb-1059453829.ap-northeast-2.elb.amazonaws.com/'
 '''
   본인 app 의 것으로 교체할 것.
@@ -159,7 +159,7 @@ def onOAuthAuthorizationCodeRedirected():
     return response
 
 
-@app.route('/memo/memo', methods=['GET'])
+@app.route('/memo', methods=['GET'])
 def get_memos():
     # 로그인이 안되어 있다면 로그인 하도록 첫 페이지로 redirect 해준다.
     userId = request.cookies.get('userId', default=None)
@@ -184,7 +184,7 @@ def get_memos():
     return {'memos': result}
 
 
-@app.route('/memo/memo', methods=['POST'])
+@app.route('/memo', methods=['POST'])
 def post_new_memo():
     # 로그인이 안되어 있다면 로그인 하도록 첫 페이지로 redirect 해준다.
     userId = request.cookies.get('userId', default=None)
