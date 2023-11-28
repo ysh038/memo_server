@@ -4,6 +4,7 @@ import requests
 import json
 import urllib
 import pymysql
+import logging
 
 from flask import abort, Flask, make_response, render_template, redirect, request
 # from credentials import DATABASE as DB
@@ -21,6 +22,8 @@ naver_redirect_uri_auth = 'http://60172174-lb-1059453829.ap-northeast-2.elb.amaz
   여기 지정된 url 이 http://localhost:8000/auth 처럼 /auth 인 경우
   아래 onOAuthAuthorizationCodeRedirected() 에 @app.route('/auth') 태깅한 것처럼 해야 함
 '''
+logging.basicConfig(level=logging.INFO)
+
 def connect_db():
     conn = pymysql.connect(
         host='43.203.5.205',
