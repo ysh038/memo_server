@@ -25,21 +25,24 @@ naver_redirect_uri_auth = 'http://60172174-lb-1059453829.ap-northeast-2.elb.amaz
 logging.basicConfig(level=logging.INFO)
 
 def connect_db():
-    conn = pymysql.connect(
-        host='43.203.5.205',
-        user='root',
-        password='pass',
-        db='memo',
-        charset='utf8'
-    )
-    # 아래 config들은 postgresql 사용할때
-    # host="127.0.0.1", # docker 이용해서 DB 접근할때는, DB 이름으로 원래는 container-postgres
-    # dbname="postgres",
-    # user="postgres",
-    # password="y3558325",
-    # port=5432,
-    conn.autocommit = True
-    return conn
+    try:
+        conn = pymysql.connect(
+            host='43.203.5.205',
+            user='root',
+            password='pass',
+            db='memo',
+            charset='utf8'
+        )
+        # 아래 config들은 postgresql 사용할때
+        # host="127.0.0.1", # docker 이용해서 DB 접근할때는, DB 이름으로 원래는 container-postgres
+        # dbname="postgres",
+        # user="postgres",
+        # password="y3558325",
+        # port=5432,
+        conn.autocommit = True
+        return conn
+    except:
+        return "connect_db서 오류"
 
 @app.route('/')
 def home():
@@ -49,6 +52,7 @@ def home():
     # (참고: 아래 onOAuthAuthorizationCodeRedirected() 마지막 부분 response.set_cookie('userId', user_id) 참고)
     userId = request.cookies.get('userId', default=None)
     name = None
+    return render_template('index.html', name=name)
 
     ####################################################
     # TODO: 아래 부분을 채워 넣으시오.
