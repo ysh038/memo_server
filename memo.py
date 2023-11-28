@@ -52,7 +52,6 @@ def home():
     # (참고: 아래 onOAuthAuthorizationCodeRedirected() 마지막 부분 response.set_cookie('userId', user_id) 참고)
     userId = request.cookies.get('userId', default=None)
     name = None
-    return render_template('index.html', name=name)
 
     ####################################################
     # TODO: 아래 부분을 채워 넣으시오.
