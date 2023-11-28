@@ -94,7 +94,7 @@ def onLogin():
 # 아래는 Redirect URI 로 등록된 경우 호출된다.
 # 만일 본인의 Redirect URI 가 http://localhost:8000/auth 의 경우처럼 /auth 대신 다른 것을
 # 사용한다면 아래 @app.route('/auth') 의 내용을 그 URL 로 바꿀 것
-@app.route('/auth')
+@app.route('/memo/auth')
 def onOAuthAuthorizationCodeRedirected():
     # TODO: 아래 1 ~ 4 를 채워 넣으시오.
     # 1. redirect uri 를 호출한 request 로부터 authorization code 와 state 정보를 얻어낸다.
@@ -113,7 +113,6 @@ def onOAuthAuthorizationCodeRedirected():
     url = f'https://nid.naver.com/oauth2.0/token?{urlencoded}'
     response = requests.post(url)
     access_token = response.json()["access_token"]
-
     # 3. 얻어낸 access token 을 이용해서 프로필 정보를 반환하는 API 를 호출하고,
     #    유저의 고유 식별 번호를 얻어낸다.
     header = "Bearer " + access_token # Bearer 다음에 공백 추가
@@ -154,7 +153,7 @@ def onOAuthAuthorizationCodeRedirected():
             print(f"유저 db생성 완료, 현재 users 테이블 목록 \n{cur.fetchall()}\n")
         conn.commit()
         # 5. 첫 페이지로 redirect 하는데 로그인 쿠키를 설정하고 보내준다.
-        response = redirect('/')
+        response = redirect('/memo')
         response.set_cookie('userId', user_id)
     except pymysql.err.InternalError as e:
         print("error : e")
@@ -163,7 +162,7 @@ def onOAuthAuthorizationCodeRedirected():
     except pymysql.err.DataError as e:
         print('error: ',e)
         conn.rollback()
-        response = redirect('/')
+        response = redirect('/memo')
     finally:
         cur.close()
         conn.close()
@@ -175,7 +174,7 @@ def get_memos():
     # 로그인이 안되어 있다면 로그인 하도록 첫 페이지로 redirect 해준다.
     userId = request.cookies.get('userId', default=None)
     if not userId:
-        return redirect('/')
+        return redirect('/memo')
 
     # TODO: DB 에서 해당 userId 의 메모들을 읽어오도록 아래를 수정한다.
     result = []
@@ -200,7 +199,7 @@ def post_new_memo():
     # 로그인이 안되어 있다면 로그인 하도록 첫 페이지로 redirect 해준다.
     userId = request.cookies.get('userId', default=None)
     if not userId:
-        return redirect('/')
+        return redirect('/memo')
 
     # 클라이언트로부터 JSON 을 받았어야 한다.
     if not request.is_json:
