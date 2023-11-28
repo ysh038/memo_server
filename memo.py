@@ -32,7 +32,7 @@ def connect_db():
     conn.autocommit = True
     return conn
 
-@app.route('/')
+@app.route('/memo/')
 def home():
     # 쿠기를 통해 이전에 로그인 한 적이 있는지를 확인한다.
     # 이 부분이 동작하기 위해서는 OAuth 에서 access token 을 얻어낸 뒤
@@ -67,7 +67,7 @@ def home():
 # 이를 우회하기 위해서 브라우저가 호출할 URL 을 HTML 에 하드코딩하지 않고,
 # 아래처럼 서버가 주는 URL 로 redirect 하는 것으로 처리한다.
 # 주의! 아래 API 는 잘 동작하기 때문에 손대지 말 것
-@app.route('/login')
+@app.route('/memo/login')
 def onLogin():
     params={
             'response_type': 'code',
@@ -82,7 +82,7 @@ def onLogin():
 # 아래는 Redirect URI 로 등록된 경우 호출된다.
 # 만일 본인의 Redirect URI 가 http://localhost:8000/auth 의 경우처럼 /auth 대신 다른 것을
 # 사용한다면 아래 @app.route('/auth') 의 내용을 그 URL 로 바꿀 것
-@app.route('/auth')
+@app.route('/memo/auth')
 def onOAuthAuthorizationCodeRedirected():
     # TODO: 아래 1 ~ 4 를 채워 넣으시오.
     # 1. redirect uri 를 호출한 request 로부터 authorization code 와 state 정보를 얻어낸다.
@@ -159,7 +159,7 @@ def onOAuthAuthorizationCodeRedirected():
     return response
 
 
-@app.route('/memo', methods=['GET'])
+@app.route('/memo/memo', methods=['GET'])
 def get_memos():
     # 로그인이 안되어 있다면 로그인 하도록 첫 페이지로 redirect 해준다.
     userId = request.cookies.get('userId', default=None)
@@ -184,7 +184,7 @@ def get_memos():
     return {'memos': result}
 
 
-@app.route('/memo', methods=['POST'])
+@app.route('/memo/memo/', methods=['POST'])
 def post_new_memo():
     # 로그인이 안되어 있다면 로그인 하도록 첫 페이지로 redirect 해준다.
     userId = request.cookies.get('userId', default=None)
