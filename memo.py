@@ -32,7 +32,7 @@ def connect_db():
     conn.autocommit = True
     return conn
 
-@app.route('/memo/')
+@app.route('/')
 def home():
     # 쿠기를 통해 이전에 로그인 한 적이 있는지를 확인한다.
     # 이 부분이 동작하기 위해서는 OAuth 에서 access token 을 얻어낸 뒤
