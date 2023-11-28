@@ -15,7 +15,7 @@ app = Flask(__name__)
 
 naver_client_id = 'Py8QuVo4SDJNdVdeVTEZ'
 naver_client_secret = 'zmQgnNNDt9'
-naver_redirect_uri = 'http://60172174-lb-1059453829.ap-northeast-2.elb.amazonaws.com/memo/auth'
+naver_redirect_uri = 'http://60172174-lb-1059453829.ap-northeast-2.elb.amazonaws.com/auth'
 naver_redirect_uri_auth = 'http://60172174-lb-1059453829.ap-northeast-2.elb.amazonaws.com/'
 '''
   본인 app 의 것으로 교체할 것.
@@ -88,14 +88,10 @@ def onLogin():
     url = f'https://nid.naver.com/oauth2.0/authorize?{urlencoded}'
     return redirect(url)
 
-@app.route('/memo/auth')
-def catchMemoAuth():
-    print("Here is /memo/auth")
-
 # 아래는 Redirect URI 로 등록된 경우 호출된다.
 # 만일 본인의 Redirect URI 가 http://localhost:8000/auth 의 경우처럼 /auth 대신 다른 것을
 # 사용한다면 아래 @app.route('/auth') 의 내용을 그 URL 로 바꿀 것
-@app.route('/auth')
+@app.route('/memo/auth')
 def onOAuthAuthorizationCodeRedirected():
     # TODO: 아래 1 ~ 4 를 채워 넣으시오.
     # 1. redirect uri 를 호출한 request 로부터 authorization code 와 state 정보를 얻어낸다.
@@ -160,6 +156,7 @@ def onOAuthAuthorizationCodeRedirected():
     except pymysql.err.InternalError as e:
         print("error : e")
         print("데이터베이스 Internal 에러")
+        return f"{e}"
     except pymysql.err.DataError as e:
         print('error: ',e)
         conn.rollback()
