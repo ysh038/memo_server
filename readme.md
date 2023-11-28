@@ -163,3 +163,15 @@ ec2 에서 할땐, sudo 붙여야함
  ~~index.html에서 login 버튼의 onClick 이벤트를 보니까, window.location 으로 되어있어서 앱 내부에서 redirect 하는 식으로 해서 앞에 prefix 빼도 되는듯~~
 
 ~~prefix를 하는건 브라우저에서 직접 request할때만? 아마도?~~
+
+# mysql docker 컨테이너 접속하기
+
+>$sudo docker exec -it mysql-container bash
+
+>$mysql -uroot -p
+
+##### mysql 컬럼 utf8 오류 뜰때
+>"ALTER TABLE mytable MODIFY name VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_bin;"
+
+##### mysql flask에서 execute해도 적용 안될 때
+cur.commit 같은것을 해야함!!

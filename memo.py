@@ -3,7 +3,7 @@ import random
 import requests
 import json
 import urllib
-import psycopg2, psycopg2.extras
+import pymysql
 
 from flask import abort, Flask, make_response, render_template, redirect, request
 # from credentials import DATABASE as DB
@@ -22,13 +22,19 @@ naver_redirect_uri_auth = 'http://60172174-lb-1059453829.ap-northeast-2.elb.amaz
   아래 onOAuthAuthorizationCodeRedirected() 에 @app.route('/auth') 태깅한 것처럼 해야 함
 '''
 def connect_db():
-    conn = psycopg2.connect(
-        host="60172174-lb-1059453829.ap-northeast-2.elb.amazonaws.com", # docker 이용해서 DB 접근할때는, DB 이름으로 원래는 127.0.0.1
-        dbname="postgres",
-        user="postgres",
-        password="y3558325",
-        port=5432,
+    conn = pymysql.connect(
+        host='43.203.5.205',
+        user='root',
+        password='pass',
+        db='memo',
+        charset='utf8'
     )
+    # 아래 config들은 postgresql 사용할때
+    # host="127.0.0.1", # docker 이용해서 DB 접근할때는, DB 이름으로 원래는 container-postgres
+    # dbname="postgres",
+    # user="postgres",
+    # password="y3558325",
+    # port=5432,
     conn.autocommit = True
     return conn
 
@@ -130,16 +136,17 @@ def onOAuthAuthorizationCodeRedirected():
     try:
         conn = connect_db()
         cur = conn.cursor()
-        cur.execute("SELECT EXISTS (SELECT 1 FROM pg_catalog.pg_tables WHERE tablename = 'users');")
+        cur.execute("SELECT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'users' AND TABLE_SCHEMA = 'memo');")
         exists = cur.fetchone()[0]
 
         if exists == True:
             print("users 테이블이 이미 존재하므로 테이블을 생성하지 않습니다.")
-            cur.execute("INSERT INTO users (id, name) VALUES (%s, %s);", (user_id, user_name))
+            cur.execute(f"INSERT INTO users (id, name) VALUES ('{user_id}', '{user_name}');")
             cur.execute("SELECT * FROM users;")
             print(f"유저 db생성 완료, 현재 users 테이블 목록 \n{cur.fetchall()}\n")
         else:
-            cur.execute("CREATE TABLE users(id text PRIMARY KEY, name text);")
+            cur.execute("CREATE TABLE users (id TEXT PRIMARY KEY, name TEXT);")
+            cur.execute("ALTER TABLE mytable MODIFY name VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_bin;")
             cur.execute("INSERT INTO users (id, name) VALUES (%s, %s);", (user_id, user_name))
             cur.execute("SELECT * FROM users;")
             print(f"유저 db생성 완료, 현재 users 테이블 목록 \n{cur.fetchall()}\n")
@@ -147,14 +154,11 @@ def onOAuthAuthorizationCodeRedirected():
         # 5. 첫 페이지로 redirect 하는데 로그인 쿠키를 설정하고 보내준다.
         response = redirect('/')
         response.set_cookie('userId', user_id)
-    except psycopg2.IntegrityError as e:
-        # print(f"에러발생: ",type(e))
-        print("이미 존재하는 회원이므로, 로그인 처리")
-        response = redirect('/')
-        response.set_cookie('userId', user_id)
-    except psycopg2.DatabaseError as e:
-        print("error: ", type(e))
-        print("알 수 없는 데이터베이스 에러")
+    except pymysql.err.InternalError as e:
+        print("error : e")
+        print("데이터베이스 Internal 에러")
+    except pymysql.err.DataError as e:
+        print('error: ',e)
         conn.rollback()
         response = redirect('/')
     finally:
@@ -205,6 +209,7 @@ def post_new_memo():
     text = request.json['text']
 
     cur.execute(f"INSERT INTO memos (text, user_id) VALUES('{text}','{userId}');")
+    conn.commit()
     cur.close()
     conn.close()
     #
