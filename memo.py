@@ -67,7 +67,7 @@ def home():
 # 이를 우회하기 위해서 브라우저가 호출할 URL 을 HTML 에 하드코딩하지 않고,
 # 아래처럼 서버가 주는 URL 로 redirect 하는 것으로 처리한다.
 # 주의! 아래 API 는 잘 동작하기 때문에 손대지 말 것
-@app.route('/memo/login')
+@app.route('/login')
 def onLogin():
     params={
             'response_type': 'code',
