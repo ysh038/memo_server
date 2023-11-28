@@ -79,6 +79,10 @@ def onLogin():
     url = f'https://nid.naver.com/oauth2.0/authorize?{urlencoded}'
     return redirect(url)
 
+@app.route('/memo/auth')
+def catchMemoAuth():
+    print("Here is /memo/auth")
+
 # 아래는 Redirect URI 로 등록된 경우 호출된다.
 # 만일 본인의 Redirect URI 가 http://localhost:8000/auth 의 경우처럼 /auth 대신 다른 것을
 # 사용한다면 아래 @app.route('/auth') 의 내용을 그 URL 로 바꿀 것
