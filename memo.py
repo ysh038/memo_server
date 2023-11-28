@@ -15,7 +15,7 @@ app = Flask(__name__)
 
 naver_client_id = 'Py8QuVo4SDJNdVdeVTEZ'
 naver_client_secret = 'zmQgnNNDt9'
-naver_redirect_uri = 'http://60172174-lb-1059453829.ap-northeast-2.elb.amazonaws.com/auth'
+naver_redirect_uri = 'http://60172174-lb-1059453829.ap-northeast-2.elb.amazonaws.com/memo/auth'
 naver_redirect_uri_auth = 'http://60172174-lb-1059453829.ap-northeast-2.elb.amazonaws.com/'
 '''
   본인 app 의 것으로 교체할 것.
@@ -90,6 +90,10 @@ def onLogin():
     urlencoded = urllib.parse.urlencode(params)
     url = f'https://nid.naver.com/oauth2.0/authorize?{urlencoded}'
     return redirect(url)
+
+@app.route("/auth")
+def test():
+    return "hello auth"
 
 # 아래는 Redirect URI 로 등록된 경우 호출된다.
 # 만일 본인의 Redirect URI 가 http://localhost:8000/auth 의 경우처럼 /auth 대신 다른 것을
