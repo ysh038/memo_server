@@ -160,6 +160,6 @@ ec2 에서 할땐, sudo 붙여야함
 
 # login 앞에는 /memo prefix 하면 안되는 이유
 
- index.html에서 login 버튼의 onClick 이벤트를 보니까, window.location 으로 되어있어서 앱 내부에서 redirect 하는 식으로 해서 앞에 prefix 빼도 되는듯
+ ~~index.html에서 login 버튼의 onClick 이벤트를 보니까, window.location 으로 되어있어서 앱 내부에서 redirect 하는 식으로 해서 앞에 prefix 빼도 되는듯~~
 
- prefix를 하는건 브라우저에서 직접 request할때만? 아마도?
+~~prefix를 하는건 브라우저에서 직접 request할때만? 아마도?~~
